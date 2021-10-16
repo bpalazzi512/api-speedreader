@@ -1,12 +1,9 @@
-import tkinter as tk
-import vlc
-import time
 from pip._vendor import requests
 from pip._vendor.requests.models import Response
+import time
+import logging
 
-window = tk.Tk()
-greeting = tk.Label(text="Hello, Tkinter")
-greeting.pack()
+
 
 
 #first function call
@@ -25,21 +22,44 @@ def callFirst():
 
   response = requests.post(endpoint, json=json, headers=headers)
 
-  print(response.json())
+  responseJson = response.json()
+  #return (responseJson["status"])
+  return response.json()
 
 #second function to call again
 def callAgain():
-  endpoint = "https://api.assemblyai.com/v2/transcript/fr8qlzofc-cb34-485a-a0f3-2595777930a3"
+    initalTest = callFirst()
+    #while(callFirst() == "queued"):
+        #print ("queued")
+        #time.sleep(.1)
+    endpoint = "https://api.assemblyai.com/v2/transcript/fr8qlzofc-cb34-485a-a0f3-2595777930a3"
+    #endpoint = "https://api.assemblyai.com/v2/transcript/"+initalTest["id"]
+    logging.debug(initalTest["id"])
+    headers = {
+        "authorization": myApi,
+    }
 
-  headers = {
-      "authorization": myApi,
-  }
+    response = requests.get(endpoint, headers=headers)
+    test = response.json()
+    while(test["status"]== "queued"):
+        response = requests.get(endpoint, headers=headers)
+        test = response.json()
+        time.sleep(.1)
+    #print(response.json())
+    apiText = test["text"]
+    print(test["text"])
+    return apiText
 
-  response = requests.get(endpoint, headers=headers)
-  test = response.json()
-  #print(response.json())
-  print(test["text"])
+def normalTestCall():
+    endpoint = "https://api.assemblyai.com/v2/transcript/fr8qlzofc-cb34-485a-a0f3-2595777930a3"
+    headers = {
+    "authorization": "1105ab38c7e6453cb1bcb31545fe63e4",
+    }
+
+    response = requests.get(endpoint, headers=headers)
+    print(response.json())
   
   
-
+#callFirst()
 callAgain()
+#normalTestCall()
