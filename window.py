@@ -57,7 +57,7 @@ def callFirst():
 def callAgain():
     
     print("POINT 1 \n")
-    initalTest = callFirst()
+    initalTest =  callFirst()
     while(wait == 0 ):
         time.sleep(.5)
     print("POINT 2 \n")
@@ -75,6 +75,7 @@ def callAgain():
 
     response = requests.get(endpoint, headers=headers)
     test = response.json()
+    time.sleep(10)
     while(test.get("status")== "queued"):
         response = requests.get(endpoint, headers=headers)
         test = response.json()
