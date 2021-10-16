@@ -17,7 +17,7 @@ button = tk.Button(
     fg="yellow",
 )
 
-widgetLabel = tk.Label(text="WPM")
+widgetLabel = tk.Label(text="WPM,enter to start")
 entry = tk.Entry()
 
 label.pack()
