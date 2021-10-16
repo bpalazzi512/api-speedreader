@@ -12,7 +12,7 @@ import logging
 import json
 
 
-myApi = "1105ab38c7e6453cb1bcb31545fe63e4"
+myApiToken = "1105ab38c7e6453cb1bcb31545fe63e4"
 callAgainWait = 0
 #localMyURL = " "
 #theId = " "
@@ -30,10 +30,11 @@ def callFirst():
   }
 
   headers = {
-      "authorization": myApi,
+      "authorization": myApiToken,
       "content-type": "application/json"
   }
   print("POINT 1.5 \n")
+  print(json)
   response = requests.post(endpoint, json=json, headers=headers)
   print("POINT 1.8 \n")
   responseJson = response.json()
@@ -42,14 +43,39 @@ def callFirst():
 
   global theId 
   theId = str(responseJson.get("id"))
-
+  print(theId)
   print("POINT 1.95 \n")
-  while(theId == " "):
-      time.sleep(.1)
-      theId = str(responseJson.get("id"))
-  
+#   while(theId == " "):
+#       time.sleep(.1)
+#       theId = str(responseJson.get("id"))
+
+  time.sleep(3)
+  headers = {
+            "authorization": myApiToken
+    }
+  print(headers)
+  print(endpoint)
+  response = requests.get(endpoint, headers=headers)
+  responseJson = response.json()
+  print(responseJson)
+  print(" in while ")
+  endpoint  = "https://api.assemblyai.com/v2/transcript/" + theId
+  print(endpoint)
+  while(str(responseJson.get("status"))!= "completed"):
+      print(str(responseJson.get("status")))
+      time.sleep(3)
+      headers = {
+      "authorization": myApiToken
+      }
+      response = requests.get(endpoint, headers=headers)
+      responseJson = response.json()
+      print(responseJson)
+      print(" in while ")
+
+  print("just out of while")
   #return (responseJson["status"])
   wait = 1
+  time.sleep(1)
   return response.json()
   #return id
 
@@ -66,23 +92,25 @@ def callAgain():
         #time.sleep(.1)
     #endpoint = "https://api.assemblyai.com/v2/transcript/fr8qlzofc-cb34-485a-a0f3-2595777930a3"
     #endpoint = "https://api.assemblyai.com/v2/transcript/"+initalTest["id"]
-    endpoint = "http://api.assemblyai.com/v2/transcript/"+theId
+    print(theId)
+    global endpoint
+    endpoint = "http://api.assemblyai.com/v2/transcript/" + theId
 
     print("POINT 3 \n")
     headers = {
-        "authorization": myApi,
+        "authorization": myApiToken,
     }
 
     response = requests.get(endpoint, headers=headers)
     test = response.json()
-    time.sleep(10)
+    time.sleep(1)
     while(test.get("status")== "queued"):
         response = requests.get(endpoint, headers=headers)
         test = response.json()
         time.sleep(3)
         print("loading")
     print("POINT 4 \n")
-    #print(response.json())
+    print(response.json())
     apiText = str(test.get("text"))
     #print(test["text"])
     print("APITEXT!!!!!: " + apiText)
