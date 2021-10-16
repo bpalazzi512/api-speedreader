@@ -2,17 +2,22 @@ from pip._vendor import requests
 from pip._vendor.requests.models import Response
 import time
 import logging
+from window import getMyURL
 
 
 
 
 #first function call
 myApi = "1105ab38c7e6453cb1bcb31545fe63e4"
+id =" "
+
 def callFirst():
   endpoint = "https://api.assemblyai.com/v2/transcript"
+  localMyURL = getMyURL()
+  
 
   json = {
-    "audio_url": "https://s3-us-west-2.amazonaws.com/blog.assemblyai.com/audio/8-7-2018-post/7510.mp3"
+    "audio_url": localMyURL
   }
 
   headers = {
@@ -23,18 +28,19 @@ def callFirst():
   response = requests.post(endpoint, json=json, headers=headers)
 
   responseJson = response.json()
+  id =responseJson["id"]
   #return (responseJson["status"])
   return response.json()
 
 #second function to call again
 def callAgain():
+    print("POINT 1 \n")
     initalTest = callFirst()
     #while(callFirst() == "queued"):
         #print ("queued")
         #time.sleep(.1)
-    endpoint = "https://api.assemblyai.com/v2/transcript/fr8qlzofc-cb34-485a-a0f3-2595777930a3"
-    #endpoint = "https://api.assemblyai.com/v2/transcript/"+initalTest["id"]
-    logging.debug(initalTest["id"])
+    #endpoint = "https://api.assemblyai.com/v2/transcript/fr8qlzofc-cb34-485a-a0f3-2595777930a3"
+    endpoint = "https://api.assemblyai.com/v2/transcript/"+initalTest["id"]
     headers = {
         "authorization": myApi,
     }
@@ -47,19 +53,11 @@ def callAgain():
         time.sleep(.1)
     #print(response.json())
     apiText = test["text"]
-    print(test["text"])
+    #print(test["text"])
+    print("APITEXT!!!!!: " + apiText)
     return apiText
 
-def normalTestCall():
-    endpoint = "https://api.assemblyai.com/v2/transcript/fr8qlzofc-cb34-485a-a0f3-2595777930a3"
-    headers = {
-    "authorization": "1105ab38c7e6453cb1bcb31545fe63e4",
-    }
 
-    response = requests.get(endpoint, headers=headers)
-    print(response.json())
+
   
-  
-#callFirst()
-callAgain()
-#normalTestCall()
+
