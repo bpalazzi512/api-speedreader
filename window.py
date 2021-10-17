@@ -5,16 +5,23 @@ import tkinter as tk
 from tkinter import filedialog
 import time
 import sys
+import os
 from pip._vendor import requests
 from pip._vendor.requests.models import Response
 import time
 import logging
 import json
 
+from subprocess import call
+
+
 
 myApiToken = "1105ab38c7e6453cb1bcb31545fe63e4"
 callAgainWait = 0
-#localMyURL = " "
+window = tk.Tk()
+#numEntry = tk.Entry(window, width='10')
+
+#localMyURL = " "#
 #theId = " "
 
 def callFirst():
@@ -111,12 +118,15 @@ def callAgain():
         print("loading")
     print("POINT 4 \n")
     print(response.json())
+    global apiText
     apiText = str(test.get("text"))
     #print(test["text"])
     print("APITEXT!!!!!: " + apiText)
-    
+    speech = apiText
     return apiText
 
+def shareText():
+    return apiText
 
 myURL = " " 
 textFromMain = " "
@@ -129,6 +139,8 @@ def startProgram(event):
         time.sleep(1)
     
     #telempromter()
+
+
 
 def UploadAction(event=None):
     filename = filedialog.askopenfilename()
@@ -150,44 +162,34 @@ def UploadAction(event=None):
     #print(myURL)
 
     
-    label = tk.Label(text="Your Texts:")
+    
     textFromMain = callAgain()
     
-    #textFrom MAIn get text from te main here
+    
     labelTwo = tk.Label(text = textFromMain)
-    textBox = tk.Label(text = " ")
-    widgetLabel = tk.Label(text="WPM,enter to start")
+    
     entry = tk.Entry()
 
-    label.pack()
+    
+
+   
     labelTwo.pack()
-    widgetLabel.pack()
+   
     entry.pack()
-    textBox.pack()
 
     
-    window.bind("<Return>", startProgram)
+
+
+    
 
 def getMyURL():
     return localMyURL
 
-window = tk.Tk()
+
 button = tk.Button(window, text='Open', command=UploadAction)
 button.pack()
 window.mainloop()
 
-# def telempromter():
-#     words = len(textFromMain)
-#     wpm = int(entry.get())
-#     #list = textFromMain.split()
-#     for i in range (words):
-#         list = textFromMain.split()[i]
-#         textBox = tk.Label(text = list)
-#         textBox.pack()
-#         print(list)
-#         window.update()
-    
-#         time.sleep(1/wpm)
 
 button = tk.Button(
     text="Click me!",
